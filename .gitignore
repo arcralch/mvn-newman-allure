@@ -1,0 +1,4 @@
+target
+.allure
+effective-pom.xml
+allure-results

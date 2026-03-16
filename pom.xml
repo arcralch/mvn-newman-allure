@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+ http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.example</groupId>
+  <artifactId>mvn-postman</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <codehaus.version>3.1.0</codehaus.version>
+    <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+  </properties>
+
+  <dependencies>
+  </dependencies>
+
+  <build>
+  <plugins>
+
+    <!-- Limpia resultados anteriores -->
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-antrun-plugin</artifactId>
+      <version>3.1.0</version>
+
+      <executions>
+        <execution>
+          <id>clean-allure</id>
+          <phase>initialize</phase>
+          <configuration>
+            <target>
+              <delete dir="${project.basedir}/allure-results"/>
+              <mkdir dir="${project.basedir}/allure-results"/>
+            </target>
+          </configuration>
+          <goals>
+            <goal>run</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+
+
+    <!-- Ejecuta Newman -->
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>exec-maven-plugin</artifactId>
+      <version>3.1.0</version>
+
+      <executions>
+        <execution>
+          <id>run-newman</id>
+          <phase>test</phase>
+
+          <goals>
+            <goal>exec</goal>
+          </goals>
+
+          <configuration>
+            <workingDirectory>${project.basedir}</workingDirectory>
+
+            <executable>newman</executable>
+
+            <arguments>
+              <argument>run</argument>
+              <argument>src/test/java/postman/pokemon.postman_collection.json</argument>
+
+              <argument>--iteration-count</argument>
+              <argument>1</argument>
+
+              <argument>-r</argument>
+              <argument>allure</argument>
+
+              <argument>--reporter-allure-export</argument>
+              <argument>${project.basedir}/allure-results</argument>
+            </arguments>
+
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+
+
+    <!-- Allure report -->
+    <plugin>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-maven</artifactId>
+      <version>2.12.0</version>
+
+      <configuration>
+        <resultsDirectory>${project.basedir}/allure-results</resultsDirectory>
+      </configuration>
+    </plugin>
+
+  </plugins>
+</build>
+
+</project>
