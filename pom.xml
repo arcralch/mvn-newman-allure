@@ -34,8 +34,9 @@
           <phase>initialize</phase>
           <configuration>
             <target>
-              <delete dir="${project.basedir}/allure-results"/>
-              <mkdir dir="${project.basedir}/allure-results"/>
+              <delete dir="target/allure-results"/>
+              <mkdir dir="target/allure-results"/>
+              <copy file="environmentallure.properties" tofile="target/allure-results/environment.properties" failonerror="false"/>
             </target>
           </configuration>
           <goals>
@@ -64,7 +65,7 @@
           <configuration>
             <workingDirectory>${project.basedir}</workingDirectory>
 
-            <executable>newman</executable>
+            <executable>newman.cmd</executable>
 
             <arguments>
               <argument>run</argument>
@@ -76,8 +77,8 @@
               <argument>-r</argument>
               <argument>allure</argument>
 
-              <argument>--reporter-allure-export</argument>
-              <argument>${project.basedir}/allure-results</argument>
+              <argument>--reporter-allure-resultsDir</argument>
+              <argument>target/allure-results</argument>
             </arguments>
 
           </configuration>
@@ -93,7 +94,7 @@
       <version>2.12.0</version>
 
       <configuration>
-        <resultsDirectory>${project.basedir}/allure-results</resultsDirectory>
+        <resultsDirectory>${allure.results.directory}</resultsDirectory>
       </configuration>
     </plugin>
 
