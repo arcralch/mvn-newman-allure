@@ -1,4 +1,38 @@
-target
-.allure
+# =========================
+# System and IDE
+# =========================
+.DS_Store
+.vscode/
+.idea/
+*.iml
+
+# =========================
+# Java / Maven
+# =========================
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
 effective-pom.xml
-allure-results
+
+# =========================
+# Project Specific (Allure & Newman)
+# =========================
+.allure/
+allure-results/
+allure-report/
