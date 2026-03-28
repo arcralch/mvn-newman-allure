@@ -36,7 +36,7 @@
             <target>
               <delete dir="target/allure-results"/>
               <mkdir dir="target/allure-results"/>
-              <copy file="environmentallure.properties" tofile="target/allure-results/environment.properties" failonerror="false"/>
+              <copy file="src/test/java/resources/environment.properties" tofile="target/allure-results/environment.properties" failonerror="false"/>
             </target>
           </configuration>
           <goals>
