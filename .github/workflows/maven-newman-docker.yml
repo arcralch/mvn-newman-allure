@@ -1,0 +1,22 @@
+# Workflow de CI usando Docker autosuficiente
+# Ejecuta TODAS las pruebas dentro del contenedor Docker.
+# La imagen ya incluye: Newman, Maven.
+
+name: Run Tests (Docker)
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t maven-newman-tests .
+
+      - name: Run tests
+        run: docker run --rm maven-newman-tests
