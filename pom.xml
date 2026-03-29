@@ -1,104 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
- http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.example</groupId>
-  <artifactId>mvn-postman</artifactId>
-  <version>1.0-SNAPSHOT</version>
+    <groupId>com.example</groupId>
+    <artifactId>mvn-postman</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-  <properties>
-    <codehaus.version>3.1.0</codehaus.version>
-    <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
-  </properties>
+    <properties>
+        <!-- Ruta correcta para Linux -->
+        <allure.results.directory>target/allure-results</allure.results.directory>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-  <dependencies>
-  </dependencies>
+    <build>
+        <plugins>
 
-  <build>
-  <plugins>
+            <!-- ✅ Limpia resultados anteriores -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>clean-allure</id>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <target>
+                                <delete dir="target/allure-results"/>
+                                <mkdir dir="target/allure-results"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
-    <!-- Limpia resultados anteriores -->
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-antrun-plugin</artifactId>
-      <version>3.1.0</version>
+            <!-- ✅ Ejecuta pruebas Postman con Newman -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>run-newman</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
 
-      <executions>
-        <execution>
-          <id>clean-allure</id>
-          <phase>initialize</phase>
-          <configuration>
-            <target>
-              <delete dir="target/allure-results"/>
-              <mkdir dir="target/allure-results"/>
-              <copy file="src/test/java/resources/environment.properties" tofile="target/allure-results/environment.properties" failonerror="false"/>
-            </target>
-          </configuration>
-          <goals>
-            <goal>run</goal>
-          </goals>
-        </execution>
-      </executions>
-    </plugin>
+                            <workingDirectory>${project.basedir}</workingDirectory>
 
+                            <!-- 🔥 FIX PRINCIPAL -->
+                            <executable>newman</executable>
 
-    <!-- Ejecuta Newman -->
-    <plugin>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>exec-maven-plugin</artifactId>
-      <version>3.1.0</version>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>src/test/java/postman/pokemon.postman_collection.json</argument>
 
-      <executions>
-        <execution>
-          <id>run-newman</id>
-          <phase>test</phase>
+                                <argument>--iteration-count</argument>
+                                <argument>1</argument>
 
-          <goals>
-            <goal>exec</goal>
-          </goals>
+                                <argument>-r</argument>
+                                <argument>allure</argument>
 
-          <configuration>
-            <workingDirectory>${project.basedir}</workingDirectory>
+                                <argument>--reporter-allure-resultsDir</argument>
+                                <argument>target/allure-results</argument>
+                            </arguments>
 
-            <executable>newman.cmd</executable>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-            <arguments>
-              <argument>run</argument>
-              <argument>src/test/java/postman/pokemon.postman_collection.json</argument>
+            <!-- ✅ Allure report -->
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.12.0</version>
+                <configuration>
+                    <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+                </configuration>
+            </plugin>
 
-              <argument>--iteration-count</argument>
-              <argument>1</argument>
-
-              <argument>-r</argument>
-              <argument>allure</argument>
-
-              <argument>--reporter-allure-resultsDir</argument>
-              <argument>target/allure-results</argument>
-            </arguments>
-
-          </configuration>
-        </execution>
-      </executions>
-    </plugin>
-
-
-    <!-- Allure report -->
-    <plugin>
-      <groupId>io.qameta.allure</groupId>
-      <artifactId>allure-maven</artifactId>
-      <version>2.12.0</version>
-
-      <configuration>
-        <resultsDirectory>${allure.results.directory}</resultsDirectory>
-      </configuration>
-    </plugin>
-
-  </plugins>
-</build>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-allure-environment</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/allure-results</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/test/java/resources</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>environment.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
