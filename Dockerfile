@@ -1,20 +1,24 @@
-FROM maven:3.8.7-eclipse-temurin-11
+# Imagen base con Java y Maven
+FROM maven:3.9.9-eclipse-temurin-11
 
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Instalar git + Node.js + Newman + Allure reporter
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    git curl gnupg \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && npm install -g newman newman-reporter-allure \
+    && apt-get clean
 
-RUN npm install -g newman newman-reporter-allure
-
+# Directorio de trabajo
 WORKDIR /app
 
-RUN git clone https://github.com/arcralch/mvn-newman-allure.git .
+# Clonar repositorio (CAMBIA LA URL)
+RUN git clone https://github.com/arcralch/mvn-newman-allure.git -b main .
 
+# Permisos
+RUN chmod -R 755 /app
+
+# Ejecutar pruebas
 CMD ["mvn", "clean", "test"]
