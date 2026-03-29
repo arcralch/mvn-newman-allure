@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Construir imagen Docker
+      - name: Build Docker image
+        run: docker build -t mvn-newman-allure .
+
+      # 3. Ejecutar pruebas dentro del contenedor
+      - name: Run tests in Docker
+        run: |
+          docker run --name test-container mvn-newman-allure mvn clean test
