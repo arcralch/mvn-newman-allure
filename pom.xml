@@ -7,25 +7,36 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>mvn-postman</artifactId>
+    <artifactId>mvn-newman-allure</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <!-- Ruta correcta para Linux -->
         <allure.results.directory>target/allure-results</allure.results.directory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.release>11</maven.compiler.release>
+
+        <!-- Configuración de SonarCloud -->
+        <sonar.organization>arcralch</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.token>${env.SONAR_TOKEN}</sonar.token>
+        <sonar.projectKey>mvn-newman-allure</sonar.projectKey>
+        <sonar.projectName>mvn-newman-allure</sonar.projectName>
     </properties>
 
     <build>
         <plugins>
 
-            <!-- ✅ Limpia resultados anteriores -->
+            <!-- Limpia resultados anteriores -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
                     <execution>
+                        <?m2e execute onConfiguration?>
                         <id>clean-allure</id>
                         <phase>initialize</phase>
                         <configuration>
@@ -41,7 +52,7 @@
                 </executions>
             </plugin>
 
-            <!-- ✅ Ejecuta pruebas Postman con Newman -->
+            <!-- Ejecuta pruebas Postman con Newman -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -57,7 +68,7 @@
 
                             <workingDirectory>${project.basedir}</workingDirectory>
 
-                            <!-- 🔥 FIX PRINCIPAL -->
+                            <!-- FIX PRINCIPAL -->
                             <executable>newman</executable>
 
                             <arguments>
@@ -79,7 +90,7 @@
                 </executions>
             </plugin>
 
-            <!-- ✅ Allure report -->
+            <!-- Allure report -->
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
@@ -113,6 +124,21 @@
                             </resources>
                         </configuration>
                     </execution>
+                </executions>
+            </plugin>
+
+            <!-- Plugin oficial para el análisis de SonarCloud -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>4.0.0.4121</version>
+                <executions>
+                        <execution>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sonar</goal>
+                            </goals>
+                        </execution>
                 </executions>
             </plugin>
         </plugins>

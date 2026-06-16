@@ -41,3 +41,8 @@ effective-pom.xml
 .allure/
 allure-results/
 allure-report/
+
+# =========================
+# Seguridad / Credenciales Privadas
+# =========================
+sonar.properties
