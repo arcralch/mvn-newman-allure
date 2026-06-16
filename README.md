@@ -6,8 +6,10 @@ Este proyecto está diseñado para ejecutar pruebas automatizadas de APIs median
 
 *   **Orquestación con Maven**: Permite ejecutar pruebas de Newman directamente desde el ciclo de vida de Maven usando `exec-maven-plugin`.
 *   **Pruebas de API con Postman**: Utiliza colecciones de Postman almacenadas en el proyecto, actualmente configurado para ejecutar `pokemon.postman_collection.json`.
-*   **Reportes Visuales con Allure**: Genera de manera automática los resultados de Newman y levanta un servidor para visualizar el reporte en el navegador web con `allure-maven`.
+*   **Reportes Visuales con Allure**: Genera de manera automática los resultados de Newman y levanta un servidor para visualizar el reporte en el navegador web con `allure-maven`. Incluye la copia automática de propiedades de entorno (`environment.properties`).
 *   **Limpieza Automática**: Limpia automáticamente los resultados de ejecuciones de pruebas de reportes obsoletos con `maven-antrun-plugin`.
+*   **Análisis de Código con SonarCloud**: Integración configurada mediante `sonar-maven-plugin` para evaluar la calidad del proyecto.
+*   **Ejecución con Docker**: Entorno en contenedor (`Dockerfile`) listo para instalar todas las dependencias (Node, Newman, etc.) y correr las pruebas de forma aislada.
 
 ## 📋 Requisitos Previos
 
@@ -40,6 +42,20 @@ Para ejecutar las pruebas configuradas en la colección de Postman y limpiar cua
 mvn clean test
 ```
 *Este comando asegura una ejecución limpia borrando y volviendo a intentar cargar datos en la carpeta `allure-results/` antes de cada ejecución.*
+
+### Ejecución con Docker
+Si prefieres no instalar las dependencias localmente, puedes construir y ejecutar el contenedor que se encargará de correr los tests automáticamente:
+```bash
+docker build -t mvn-newman-allure .
+docker run --rm mvn-newman-allure
+```
+
+### Análisis con SonarCloud
+Para realizar y enviar el análisis de calidad de código a SonarCloud (debes tener configurado tu token), ejecuta:
+```bash
+export SONAR_TOKEN=tu_token_aqui
+mvn verify sonar:sonar
+```
 
 ## 📊 Visualización del Reporte (Allure Reports)
 

@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y \
 # Validar instalación (evita errores silenciosos)
 RUN newman -v
 
-# Clonar repositorio (CAMBIA LA URL)
-RUN git clone https://github.com/arcralch/mvn-newman-allure.git -b main /app
+# Copiar el código del proyecto local al contenedor
+COPY . /app
 
 # Directorio de trabajo
 WORKDIR /app
