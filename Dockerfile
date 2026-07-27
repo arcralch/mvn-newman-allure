@@ -22,5 +22,5 @@ WORKDIR /app
 # Permisos
 RUN chmod -R 755 /app
 
-# Ejecutar pruebas
-CMD ["mvn", "clean", "test"]
+# Ejecutar pruebas y generar reporte Allure
+CMD ["sh", "-c", "mvn clean test && mvn allure:report"]
