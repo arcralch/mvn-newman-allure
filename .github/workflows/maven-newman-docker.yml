@@ -23,6 +23,7 @@ jobs:
 
       - name: Extract Allure results from container
         run: |
+          mkdir -p ./target/allure-results ./target/allure-report
           docker cp temp-container:/app/target/allure-results ./target/allure-results
           docker cp temp-container:/app/target/allure-report ./target/allure-report
           docker rm temp-container
