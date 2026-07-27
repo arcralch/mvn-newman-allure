@@ -23,4 +23,5 @@ WORKDIR /app
 RUN chmod -R 755 /app
 
 # Ejecutar pruebas y generar reporte Allure
-CMD ["sh", "-c", "mvn clean test && mvn allure:report"]
+# No se usa mvn clean para evitar problemas con directorios montados como volumes
+CMD ["sh", "-c", "mvn test && mvn allure:report"]

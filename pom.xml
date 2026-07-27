@@ -41,8 +41,8 @@
                         <phase>initialize</phase>
                         <configuration>
                             <target>
-                                <delete dir="target/allure-results"/>
-                                <mkdir dir="target/allure-results"/>
+                                <delete dir="${allure.results.directory}" quiet="true"/>
+                                <mkdir dir="${allure.results.directory}"/>
                             </target>
                         </configuration>
                         <goals>
