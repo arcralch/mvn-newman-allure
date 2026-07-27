@@ -98,6 +98,14 @@
                 <configuration>
                     <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

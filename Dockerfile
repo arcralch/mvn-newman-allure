@@ -23,5 +23,5 @@ WORKDIR /app
 RUN chmod -R 755 /app
 
 # Ejecutar pruebas y generar reporte Allure
-# No se usa mvn clean para evitar problemas con directorios montados como volumes
-CMD ["sh", "-c", "mvn test && mvn allure:report"]
+# mvn verify ejecuta pruebas y el phase verify donde allure-maven genera el reporte
+CMD ["sh", "-c", "mvn verify"]
