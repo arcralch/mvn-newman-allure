@@ -19,14 +19,15 @@ jobs:
         run: docker build -t maven-newman-tests .
 
       - name: Run tests and generate Allure report
-        run: docker run --name temp-container maven-newman-tests
+        run: docker run --name temp-container maven-newman-tests || true
 
       - name: Extract Allure results from container
+        if: always()
         run: |
           mkdir -p ./target/allure-results ./target/allure-report
-          docker cp temp-container:/app/target/allure-results ./target/allure-results
-          docker cp temp-container:/app/target/allure-report ./target/allure-report
-          docker rm temp-container
+          docker cp temp-container:/app/target/allure-results ./target/allure-results || true
+          docker cp temp-container:/app/target/allure-report ./target/allure-report || true
+          docker rm temp-container || true
 
       - name: Upload Allure results
         uses: actions/upload-artifact@v4

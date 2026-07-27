@@ -23,5 +23,5 @@ WORKDIR /app
 RUN chmod -R 755 /app
 
 # Ejecutar pruebas y generar reporte Allure
-# mvn verify ejecuta pruebas y el phase verify donde allure-maven genera el reporte
-CMD ["sh", "-c", "mvn verify"]
+# mvn test + mvn site ejecuta pruebas y genera reporte Allure
+CMD ["sh", "-c", "mvn test && mvn site"]

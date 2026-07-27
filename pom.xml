@@ -100,7 +100,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>verify</phase>
+                        <phase>site</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
