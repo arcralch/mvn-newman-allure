@@ -24,9 +24,8 @@ jobs:
       - name: Extract Allure results from container
         if: always()
         run: |
-          mkdir -p ./target/allure-results ./target/allure-report
+          mkdir -p ./target/allure-results
           docker cp temp-container:/app/target/allure-results ./target/allure-results || true
-          docker cp temp-container:/app/target/allure-report ./target/allure-report || true
           docker rm temp-container || true
 
       - name: Upload Allure results
@@ -34,11 +33,4 @@ jobs:
         with:
           name: allure-results
           path: target/allure-results/
-          retention-days: 30
-
-      - name: Upload Allure report
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: target/allure-report/
           retention-days: 30
