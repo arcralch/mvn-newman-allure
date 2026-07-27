@@ -1,4 +1,4 @@
-FROM maven:3.9.9-eclipse-temurin-11
+FROM maven:3.9.9-eclipse-temurin-17
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && npm install -g newman newman-reporter-allure \
     && apt-get clean
 
-# Validar instalación (evita errores silenciosos)
+# Validar instalación
 RUN newman -v
 
 # Copiar el código del proyecto local al contenedor
@@ -22,5 +22,6 @@ WORKDIR /app
 # Permisos
 RUN chmod -R 755 /app
 
-# Ejecutar pruebas
-CMD ["mvn", "clean", "test"]
+# Ejecutar pruebas y generar reporte Allure
+# mvn site ejecuta pruebas (phase test) y genera reporte Allure (phase site)
+CMD ["sh", "-c", "mvn site"]
